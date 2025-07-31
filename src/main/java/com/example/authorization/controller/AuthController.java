@@ -57,7 +57,8 @@ public class AuthController {
                 Map<String, String> response = new HashMap<>();
                 response.put("token", jwt);
                 response.put("message", "Login successful");
-                response.put("userid", loginDTO.getUserid());
+                response.put("userid", authService.getUserid(loginDTO.getEmail()));
+//                System.out.println(loginDTO.getUserid());
                 return ResponseEntity.ok(response);
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid credentials"));
