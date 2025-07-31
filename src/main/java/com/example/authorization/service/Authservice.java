@@ -72,5 +72,10 @@ public class Authservice {
     }
 
 
+    public String getUserid(String gmail) {
+        return userRepo.findByEmail(gmail)
+                .map(user -> String.valueOf(user.getUserid()))
+                .orElseThrow(() -> new customException("User ID " + " not found."));
+    }
 
 }

@@ -12,3 +12,4 @@ public class userLoginDTO {
            private String password;
            private String userid;
 }
+
