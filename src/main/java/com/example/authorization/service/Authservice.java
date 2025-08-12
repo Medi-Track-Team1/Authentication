@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -76,6 +77,17 @@ public class Authservice {
         return userRepo.findByEmail(gmail)
                 .map(user -> String.valueOf(user.getUserid()))
                 .orElseThrow(() -> new customException("User ID " + " not found."));
+    }
+    public Optional<User> getUserByEmail(String email) {
+        return userRepo.findByEmail(email);
+    }
+
+    public User resetPassword(Long userId, String newPassword) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new customException("User not found"));
+
+        user.setPassword(encoder.encode(newPassword));
+        return userRepo.save(user);
     }
 
 }

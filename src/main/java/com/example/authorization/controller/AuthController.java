@@ -5,6 +5,7 @@ import com.example.authorization.dto.userLoginDTO;
 import com.example.authorization.model.User;
 import com.example.authorization.service.Authservice;
 import com.example.authorization.service.JwtService;
+import com.example.authorization.utils.customException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,6 +74,34 @@ public class AuthController {
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Login failed: " + e.getMessage()));
+        }
+    }
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestParam String email) {
+        try {
+            User user = authService.getUserByEmail(email)
+                    .orElseThrow(() -> new customException("User with email " + email + " not found"));
+
+            // In a real application, you would send a password reset email here
+            // For this example, we'll just return a success message
+            return ResponseEntity.ok(Map.of(
+                    "message", "Password reset link sent to email",
+                    "userId", user.getUserid()
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(
+            @RequestParam Long userId,
+            @RequestParam String newPassword) {
+        try {
+            User updatedUser = authService.resetPassword(userId, newPassword);
+            return ResponseEntity.ok(Map.of("message", "Password updated successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
         }
     }
 
