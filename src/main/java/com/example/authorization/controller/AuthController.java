@@ -60,12 +60,14 @@ public class AuthController {
 
             if (authentication.isAuthenticated()) {
                 String jwt = jwtService.generateToken(loginDTO.getEmail());
-
+                User user = authService.getUserByEmail(loginDTO.getEmail())
+                        .orElseThrow(() -> new customException("User not found"));
                 // Returning token as JSON response
                 Map<String, String> response = new HashMap<>();
                 response.put("token", jwt);
                 response.put("message", "Login successful");
                 response.put("userid", authService.getUserid(loginDTO.getEmail()));
+                response.put("username", user.getUsername());
 //                System.out.println(loginDTO.getUserid());
                 return ResponseEntity.ok(response);
             } else {
