@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class userLoginDTO {
            private String email;
            private String password;
+           private String username;
            private String userid;
 }
 
