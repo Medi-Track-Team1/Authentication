@@ -77,7 +77,7 @@ public class AuthController {
         }
     }
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestParam String email) {
+    public ResponseEntity<?> forgotPassword(@PathVariable String email) {
         try {
             User user = authService.getUserByEmail(email)
                     .orElseThrow(() -> new customException("User with email " + email + " not found"));
