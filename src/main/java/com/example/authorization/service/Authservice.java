@@ -82,8 +82,8 @@ public class Authservice {
         return userRepo.findByEmail(email);
     }
 
-    public User resetPassword(Long userId, String newPassword) {
-        User user = userRepo.findById(userId)
+    public User resetPassword(String userId, String newPassword) {
+        User user = userRepo.findByUserid(userId)
                 .orElseThrow(() -> new customException("User not found"));
 
         user.setPassword(encoder.encode(newPassword));

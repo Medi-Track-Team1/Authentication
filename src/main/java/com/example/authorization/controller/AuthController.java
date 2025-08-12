@@ -97,7 +97,7 @@ public class AuthController {
 
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(
-            @RequestParam Long userId,
+            @RequestParam String userId,
             @RequestParam String newPassword) {
         try {
             User updatedUser = authService.resetPassword(userId, newPassword);
