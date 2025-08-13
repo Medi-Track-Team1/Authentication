@@ -62,9 +62,9 @@ public class AuthController {
                 String jwt = jwtService.generateToken(loginDTO.getEmail());
                 User user = authService.getUserByEmail(loginDTO.getEmail())
                         .orElseThrow(() -> new customException("User not found"));
-                String role = user.getRoles().stream()
-                        .findFirst()
-                        .map(r -> r.getName().name()).orElseThrow(() -> new customException("Role not found"));
+//                String role = user.getRoles().stream()
+//                        .findFirst()
+//                        .map(r -> r.getName().name()).orElseThrow(() -> new customException("Role not found"));
                 // Returning token as JSON response
                 Map<String, String> response = new HashMap<>();
                 response.put("token", jwt);
@@ -72,7 +72,7 @@ public class AuthController {
                 response.put("userid", authService.getUserid(loginDTO.getEmail()));
                 response.put("username", user.getUsername());
 //                System.out.println(loginDTO.getUserid());
-                response.put("role", role);
+//                response.put("role", role);
                 return ResponseEntity.ok(response);
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid credentials"));
