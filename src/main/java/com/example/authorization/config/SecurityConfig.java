@@ -51,21 +51,22 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(customizer -> customizer.disable())
+        http.csrf(customizer -> customizer.disable())  // Disabled for JWT
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/auth/**").permitAll()
-                         .requestMatchers("/api/test/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/auth/**").permitAll()  // Public endpoints
+                        .requestMatchers("/api/test/admin/**").hasRole("ADMIN")  // Role checks
                         .requestMatchers("/api/test/doctor/**").hasRole("DOCTOR")
                         .requestMatchers("/api/test/patient/**").hasRole("PATIENT")
-                        .anyRequest().authenticated())
+                        .anyRequest().authenticated())  // All others require auth
                 .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(authenticationEntryPoint)
-                        .accessDeniedHandler(accessDeniedHandler)
+                        .authenticationEntryPoint(authenticationEntryPoint)  // Handles 401
+                        .accessDeniedHandler(accessDeniedHandler)  // Handles 403
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .authenticationProvider(authProvider())
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))  // No sessions
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)  // JWT filter
+                .authenticationProvider(authProvider());  // Your auth setup
+
 
         return http.build();
     }
